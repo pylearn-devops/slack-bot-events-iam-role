@@ -2,8 +2,9 @@ name: AWS CLI Actions
 
 on:
   push:
-    branches:
-      - main  # Change this to your default branch if it's different
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   deploy:

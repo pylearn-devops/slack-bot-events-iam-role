@@ -26,7 +26,7 @@ Parameters:
 
 
 Resources: 
-  RootRole: 
+  SlackBotRole: 
     Type: "AWS::IAM::Role"
     Properties: 
       RoleName:
@@ -46,15 +46,20 @@ Resources:
           Value: !Ref OwnerContact
 
 
-  RolePolicies: 
+  SecretManagerPolicy: 
     Type: "AWS::IAM::Policy"
     Properties: 
-      PolicyName: "root"
+      PolicyName: "ab-secrets-manager-policy"
       PolicyDocument: 
         Version: "2012-10-17"
         Statement: 
           - Effect: "Allow"
-            Action: "*"
+            Action:
+              - secretsmanager:GetSecretValue
+              - secretsmanager:DescribeSecret
             Resource: "*"
+            Condition:
+              ArnLike:
+                aws:SourceArn: "arn:aws:lambda:*:564315557724:function:*"
       Roles: 
-        - Ref: "RootRole"
+        - Ref: "SlackBotRole"

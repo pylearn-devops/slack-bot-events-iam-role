@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 boto3 = "*"
+tabulate = "*
 
 [requires]
 python_version = "3.11.0"

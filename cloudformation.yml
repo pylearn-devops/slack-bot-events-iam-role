@@ -1,36 +1,21 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: IAM role for slack bot events
-
+Description: IAM role for Slack bot events
 
 Parameters:
-
   IamRoleName:
     Type: String
     Description: Name of the IAM role
-    Default: slack-bot-events-role
-
+    Default: "slack-bot-events-role"
   OwnerContact:
     Type: String
-    Description: Name of the IAM role
+    Description: Owner Contact
     Default: netaaakash@gmail.com
-
-
-  # InstanceTypeParameter:
-  #   Type: String
-  #   Default: t2.micro
-  #   AllowedValues:
-  #     - t2.micro
-  #     - m1.small
-  #     - m1.large
-  #   Description: Enter t2.micro, m1.small, or m1.large. Default is t2.micro.
-
 
 Resources: 
   SlackBotRole: 
     Type: "AWS::IAM::Role"
     Properties: 
-      RoleName:
-        Fn::Sub: ${IamRoleName}
+      RoleName: !Sub ${IamRoleName}
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -40,16 +25,14 @@ Resources:
                 - "lambda.amazonaws.com"
             Action: 
               - "sts:AssumeRole"
-
       Tags:
         - Key: Owner
           Value: !Ref OwnerContact
 
-
   SecretManagerPolicy: 
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties: 
-      PolicyName: "ab-secrets-manager-policy"
+      ManagedPolicyName: "slack-bot-events-secrets-manager-policy"
       PolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -61,5 +44,26 @@ Resources:
             Condition:
               ArnLike:
                 aws:SourceArn: "arn:aws:lambda:*:564315557724:function:*"
+      Roles: 
+        - Ref: "SlackBotRole"
+
+  CloudwatchLogsPolicy: 
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties: 
+      ManagedPolicyName: "slack-bot-events-dynamodb-policy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Action:
+              - lambda:InvokeFunction
+            Resource: "arn:aws:lambda:*:564315557724:function:*"
+          - Effect: "Allow"
+            Action:
+              - dynamodb:DescribeStream
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:ListStreams
+            Resource: "*"
       Roles: 
         - Ref: "SlackBotRole"

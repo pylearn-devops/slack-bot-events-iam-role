@@ -5,7 +5,7 @@ client = boto3.client('cloudformation')
 
 # Define your stack name and S3 template URL
 stack_name = 'ab-iam-role-stack'
-template_body = open('cloudformation.yaml').read()
+template_body = open('cloudformation.yml').read()
 
 # Create the stack
 response = client.create_stack(

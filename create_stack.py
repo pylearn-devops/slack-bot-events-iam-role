@@ -10,7 +10,7 @@ template_body = open('cloudformation.yml').read()
 # Create the stack
 response = client.create_stack(
     StackName=stack_name,
-    TemplateURL=template_body,
+    TemplateBody=template_body,
     Capabilities=[
         'CAPABILITY_NAMED_IAM',
     ]

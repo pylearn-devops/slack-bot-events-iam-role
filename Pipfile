@@ -8,4 +8,4 @@ boto3 = "*"
 tabulate = "*"
 
 [requires]
-python_version = 3.11.0
+python_version = "3.10"

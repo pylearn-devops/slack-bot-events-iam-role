@@ -32,9 +32,9 @@ jobs:
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
 
-      - run: pipenv sync --system
+      # - run: pipenv sync --system
 
-#      - run: pipenv install --dev
+     - run: pipenv install --dev
 
 
       - name: Creating aws resources
